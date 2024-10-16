@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/platform/master/src/Core/System/SystemConfig/Schema/config.xsd">
+
+    <card>
+        <title>Basic configuration</title>
+        <title lang="de-DE">Grundeinstellungen</title>
+
+        <input-field type="float">
+            <name>minimumOrderValue</name>
+            <label>Minimum order value</label>
+            <label lang="de-DE">Mindestbestellwert</label>
+        </input-field>
+
+        <input-field type="single-select">
+            <name>tax</name>
+            <options>
+                <option>
+                    <id>brutto</id>
+                    <name>brutto</name>
+                    <name lang="de-DE">Brutto</name>
+                </option>
+                <option>
+                    <id>netto</id>
+                    <name>netto</name>
+                    <name lang="de-DE">Netto</name>
+                </option>
+            </options>
+            <defaultValue>brutto</defaultValue>
+            <label>Price calculation</label>
+            <label lang="de-DE">Preisberechnung</label>
+        </input-field>
+    </card>
+</config>

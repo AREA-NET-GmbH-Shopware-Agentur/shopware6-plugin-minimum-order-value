@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://symfony.com/schema/dic/services"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="AreanetMinimumOrderValue\Core\Checkout\Cart\MinimumOrderValueProcessor">
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <argument type="service" id="translator"/>
+            <tag name="shopware.cart.processor" priority="1000"/>
+        </service>
+    </services>
+</container>
