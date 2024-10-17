@@ -28,8 +28,8 @@ class MinimumOrderValueProcessor implements CartProcessorInterface
     }
 
     public function process(CartDataCollection $data, Cart $original, Cart $toCalculate, SalesChannelContext $context, CartBehavior $behavior): void {
-        $taxStatus = $this->systemConfigService->get('AreanetMinimumOrderValue.config.tax', null);
-        $minimumOrderValue = $this->systemConfigService->get('AreanetMinimumOrderValue.config.minimumOrderValue', null);
+        $taxStatus = $this->systemConfigService->get('AreanetMinimumOrderValue.config.tax', $context->getSalesChannel()->getId());
+        $minimumOrderValue = $this->systemConfigService->get('AreanetMinimumOrderValue.config.minimumOrderValue', $context->getSalesChannel()->getId());
 
         if($taxStatus == "netto") {
             $minimumOrder = ($minimumOrderValue - $toCalculate->getPrice()->getNetPrice()) > 0 ? ($minimumOrderValue - $toCalculate->getPrice()->getNetPrice()) : 0;

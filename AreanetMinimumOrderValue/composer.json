@@ -1,0 +1,24 @@
+{
+  "name": "areanet/minimumordervalue",
+  "version": "1.0.0",
+  "description": "Minimum order value",
+  "type": "shopware-platform-plugin",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "AreanetMinimumOrderValue\\": "src/"
+    }
+  },
+  "extra": {
+    "plugin-icon": "src/Resources/plugin.png",
+    "shopware-plugin-class": "AreanetMinimumOrderValue\\AreanetMinimumOrderValue",
+    "label": {
+      "de-DE": "Mindestbestellwert",
+      "en-GB": "Minimum order value"
+    },
+    "manufacturerLink": {
+      "de-DE": "www.area-net.de",
+      "en-GB": "www.area-net.de"
+    }
+  }
+}
