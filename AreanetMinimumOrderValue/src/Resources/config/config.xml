@@ -30,5 +30,13 @@
             <label>Price calculation</label>
             <label lang="de-DE">Preisberechnung</label>
         </input-field>
+
+        <input-field type="float">
+            <name>fixedPriceForMinimumOrderItem</name>
+            <label>Fixed Price for Minimum Order Value Item</label>
+            <label lang="de-DE">Fester Preis für Mindestbestellwert-Artikel</label>
+            <helpText>Optional fixed price for the dummy item added when the cart value is below the minimum order value. If left empty, the item’s price will equal the difference between the cart value and the minimum order value.e</helpText>
+            <helpText lang="de-DE">Optionaler fester Preis für den Dummy-Artikel, der hinzugefügt wird, wenn der Warenkorbwert unter dem Mindestbestellwert liegt. Wird dieses Feld leer gelassen, entspricht der Preis des Artikels der Differenz zwischen Warenkorbwert und Mindestbestellwert.</helpText>
+        </input-field>
     </card>
 </config>

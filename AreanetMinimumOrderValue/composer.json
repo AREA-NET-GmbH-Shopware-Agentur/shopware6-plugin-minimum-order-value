@@ -1,6 +1,6 @@
 {
   "name": "areanet/minimumordervalue",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Minimum order value",
   "type": "shopware-platform-plugin",
   "license": "MIT",
