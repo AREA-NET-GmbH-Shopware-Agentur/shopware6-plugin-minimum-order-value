@@ -4,6 +4,11 @@
            xmlns="http://symfony.com/schema/dic/services"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
+        <service id="AreanetMinimumOrderValue\Core\Checkout\Cart\MinimumOrderValueCalculator"
+                 class="AreanetMinimumOrderValue\Core\Checkout\Cart\MinimumOrderValueCalculator">
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+        </service>
+
         <service id="AreanetMinimumOrderValue\Core\Checkout\Cart\MinimumOrderValueProcessor">
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
             <argument type="service" id="translator"/>

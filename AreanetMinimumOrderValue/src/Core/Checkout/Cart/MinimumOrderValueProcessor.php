@@ -28,37 +28,31 @@ class MinimumOrderValueProcessor implements CartProcessorInterface
     }
 
     public function process(CartDataCollection $data, Cart $original, Cart $toCalculate, SalesChannelContext $context, CartBehavior $behavior): void {
-        $taxStatus = $this->systemConfigService->get('AreanetMinimumOrderValue.config.tax', $context->getSalesChannel()->getId());
-        $minimumOrderValue = $this->systemConfigService->get('AreanetMinimumOrderValue.config.minimumOrderValue', $context->getSalesChannel()->getId());
-        $fixedPriceForMinimumOrderItem = $this->systemConfigService->get('AreanetMinimumOrderValue.config.fixedPriceForMinimumOrderItem', $context->getSalesChannel()->getId());
+        $calculator = new MinimumOrderValueCalculator($this->systemConfigService);
 
-        if($fixedPriceForMinimumOrderItem) {
-            if ($taxStatus == "netto") {
-                $minimumOrder = ($minimumOrderValue - $toCalculate->getPrice()->getNetPrice()) > 0 ? $fixedPriceForMinimumOrderItem : 0;
-            } else {
-                $minimumOrder = ($minimumOrderValue - $toCalculate->getPrice()->getTotalPrice()) > 0 ? $fixedPriceForMinimumOrderItem : 0;
+        $dummyLineItem = new LineItem('minimumOrderValue', 'minimumOrderValue');
+        $calculator->calculate($dummyLineItem, $toCalculate, $context);
+
+        if ($dummyLineItem->getPrice() && $dummyLineItem->getPrice()->getUnitPrice() > 0 && count($toCalculate->getLineItems())) {
+            $existingMinimumOrderItemOriginal = $original->getLineItems()->filter(function (LineItem $item) {
+                return $item->getType() === 'minimumOrderValue';
+            });
+
+            $existingMinimumOrderItemToCalculate = $toCalculate->getLineItems()->filter(function (LineItem $item) {
+                return $item->getType() === 'minimumOrderValue';
+            });
+
+            if (($behavior->isRecalculation() && $existingMinimumOrderItemOriginal->count() === 0 && $existingMinimumOrderItemToCalculate->count() === 0) || (!$behavior->isRecalculation() && $existingMinimumOrderItemToCalculate->count() === 0)) {
+                $minimumOrderValueItem = new LineItem('minimumOrderValue', 'minimumOrderValue', null, 1);
+                $minimumOrderValueItem->setLabel($this->translator->trans('areanet-minimum-order-value.minimum-order-fee'));
+                $minimumOrderValueItem->setGood(false);
+                $minimumOrderValueItem->setRemovable(false);
+                $minimumOrderValueItem->setStackable(true);
+
+                $calculator->calculate($minimumOrderValueItem, $toCalculate, $context);
+
+                $toCalculate->addLineItems(new LineItemCollection([$minimumOrderValueItem]));
             }
-        } else {
-            if ($taxStatus == "netto") {
-                $minimumOrder = ($minimumOrderValue - $toCalculate->getPrice()->getNetPrice()) > 0 ? ($minimumOrderValue - $toCalculate->getPrice()->getNetPrice()) : 0;
-            } else {
-                $minimumOrder = ($minimumOrderValue - $toCalculate->getPrice()->getTotalPrice()) > 0 ? ($minimumOrderValue - $toCalculate->getPrice()->getTotalPrice()) : 0;
-            }
-        }
-
-        if($minimumOrder && count($toCalculate->getLineItems())) {
-            $minimumOrderValueItem = new LineItem('minimumOrderValue', 'minimumOrderValue', null, 1);
-            $minimumOrderValueItem->setLabel($this->translator->trans('areanet-minimum-order-value.minimum-order-fee'));
-            $minimumOrderValueItem->setGood(false);
-            $minimumOrderValueItem->setRemovable(false);
-            $minimumOrderValueItem->setPrice(new CalculatedPrice(
-                $minimumOrder,
-                $minimumOrder,
-                new CalculatedTaxCollection(),
-                new TaxRuleCollection(),
-            ));
-
-            $toCalculate->addLineItems(new LineItemCollection([$minimumOrderValueItem]));
         }
     }
 }
